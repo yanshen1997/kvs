@@ -45,41 +45,46 @@ fn main() {
 
     let mut kv_store = KvStore::new();
 
-    match cmd_matches.subcommand() {
-        Some(("set", _matches)) => {
-            eprintln!("unimplemented");
-            exit(1);
-        }
-        Some(("get", _matches)) => {
-            eprintln!("unimplemented");
-            exit(1);
-        }
-        Some(("rm", _matches)) => {
-            eprintln!("unimplemented");
-            exit(1);
-        }
-        _ => unreachable!(),
-    }
+    // 通过测试
     // match cmd_matches.subcommand() {
-    //     Some(("get", sub_matches)) => {
-    //         if let Some(key) = sub_matches.get_one::<String>("KEY").cloned() {
-    //             println!("{}", kv_store.get(key).unwrap());
-    //         }
+    //     Some(("set", _matches)) => {
+    //         eprintln!("unimplemented");
+    //         exit(1);
     //     }
-    //     Some(("set", sub_matches)) => {
-    //         if let (Some(key), Some(value)) = (
-    //             sub_matches.get_one::<String>("KEY").cloned(),
-    //             sub_matches.get_one::<String>("VALUE").cloned(),
-    //         ) {
-    //             kv_store.set(key, value);
-    //         }
+    //     Some(("get", _matches)) => {
+    //         eprintln!("unimplemented");
+    //         exit(1);
     //     }
-    //     Some(("remove", sub_matches)) => {
-    //         if let Some(key) = sub_matches.get_one::<String>("KEY").cloned() {
-    //             kv_store.remove(key);
-    //         }
+    //     Some(("rm", _matches)) => {
+    //         eprintln!("unimplemented");
+    //         exit(1);
     //     }
-    //     _ => unreachable!("clap should ensure we don't get here"),
-    // };
+    //     _ => unreachable!(),
+    // }
+    match cmd_matches.subcommand() {
+        Some(("get", sub_matches)) => {
+            if let Some(key) = sub_matches.get_one::<String>("KEY").cloned() {
+                if let Some(val) = kv_store.get(key) {
+                    println!("{}",val)
+                }else {
+                    println!("none")
+                }
+            }
+        }
+        Some(("set", sub_matches)) => {
+            if let (Some(key), Some(value)) = (
+                sub_matches.get_one::<String>("KEY").cloned(),
+                sub_matches.get_one::<String>("VALUE").cloned(),
+            ) {
+                kv_store.set(key, value);
+                println!("ok.")
+            }
+        }
+        Some(("rm", sub_matches)) => {
+            if let Some(key) = sub_matches.get_one::<String>("KEY").cloned() {
+                kv_store.remove(key);
+            }
+        }
+        _ => unreachable!("clap should ensure we don't get here"),
+    };
 }
-

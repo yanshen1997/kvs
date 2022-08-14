@@ -1,7 +1,9 @@
-use assert_cmd::prelude::*;
-use kvs::KvStore;
-use predicates::str::contains;
 use std::process::Command;
+
+use assert_cmd::prelude::*;
+use predicates::str::contains;
+
+use kvs::KvStore;
 
 // `kvs` with no args should exit with a non-zero code.
 #[test]
@@ -26,8 +28,8 @@ fn cli_get() {
         .unwrap()
         .args(&["get", "key1"])
         .assert()
-        .failure()
-        .stderr(contains("unimplemented"));
+        .success()
+        .stdout("none\n");
 }
 
 // `kvs set <KEY> <VALUE>` should print "unimplemented" to stderr and exit with non-zero code
@@ -37,8 +39,8 @@ fn cli_set() {
         .unwrap()
         .args(&["set", "key1", "value1"])
         .assert()
-        .failure()
-        .stderr(contains("unimplemented"));
+        .success()
+        .stdout("ok.\n");
 }
 
 // `kvs rm <KEY>` should print "unimplemented" to stderr and exit with non-zero code
@@ -48,8 +50,7 @@ fn cli_rm() {
         .unwrap()
         .args(&["rm", "key1"])
         .assert()
-        .failure()
-        .stderr(contains("unimplemented"));
+        .success();
 }
 
 #[test]
